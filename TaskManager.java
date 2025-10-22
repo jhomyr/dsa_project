@@ -18,11 +18,16 @@ do{
     System.out.println("Enter your choice");
     choice = scanner.nextInt();
     scanner.nextInt();
-    
-
-
-
-    
+    switch(choice) {
+        case 1 -> addTask(scanner);
+        case 2 -> ViewAllTask();
+        case 3 -> ViewFirstTask();
+        case 4 -> deleteTask(scanner);
+        case 5 -> MarkTaskComplete(scanner);
+        case 6 -> showStatistics();
+        case 0 -> System.out.println("Goodbye");
+        default -> System.out.println("INVALID CHOICE");
+    }
 } while (choice != 0);
   
 }
