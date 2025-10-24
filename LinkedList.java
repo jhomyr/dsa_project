@@ -33,5 +33,12 @@ public void displayAllTask(){
 }
     Node<Task> current = head;
     int index = 1;
+
+    while(current != null){
+        System.out.println(index + ". " + current.data);
+        current = current.next;
+        index++
+    }
+
 }
 }
