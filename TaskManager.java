@@ -46,7 +46,8 @@ do{
 
     }
     private void ViewAllTask(){
-
+        System.out.println(" --------The list of all Task (OLDEST FIRST)-------- ");
+        taskList.displayAllTask();
     }
     private void ViewFirstTask(){
 
