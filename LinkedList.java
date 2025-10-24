@@ -26,3 +26,12 @@ public void addTask(Task task){
     }
     size++; // every time if there's something add the size will also expand  
 }
+public void displayAllTask(){
+    if(head == null){
+        System.out.println("No task found. ");
+        return;
+}
+    Node<Task> current = head;
+    int index = 1;
+}
+}
