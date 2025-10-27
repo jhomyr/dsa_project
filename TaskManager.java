@@ -43,7 +43,13 @@ do{
 
     }
     private void addTask(Scanner scanner) {
-
+        System.out.println("-------- We will now be adding a new task --------");
+        System.out.println("Enter new task name");
+        String name = scanner.nextLine();
+        System.out.println("Enter the task's priority (High/Medium/Low)");
+        String priority = scanner.nextLine();
+        System.out.println("Enter the task's category");
+        String category = scanner.nextLine();
     }
     private void ViewAllTask(){
         System.out.println(" --------The list of all Task (OLDEST FIRST)-------- ");
