@@ -39,6 +39,21 @@ public void displayAllTask(){
         current = current.next;
         index++
     }
-
+}
+public void displayTaskBackwards(){
+    if(tail == null){
+    System.out.println("No task found. ");
+    return;
+    }
+    System.out.println(" ------ TASKS (NEWEST FIRST)------ ");
+        Node<Task> current = tail;
+            int index = size;
+    while(current != null){
+        System.out.println(index + ". " + current.data );
+        current = current.previous;
+        index--;
+    }
+        
+    
 }
 }
