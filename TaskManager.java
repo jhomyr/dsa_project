@@ -56,6 +56,8 @@ do{
         taskList.displayAllTask();
     }
     private void ViewFirstTask(){
+        System.out.println(" --------All task (NEWEST FIRST)-------- ");
+        taskList.displayTaskBackwards();
 
     }
     private void deleteTask(Scanner scanner) {
