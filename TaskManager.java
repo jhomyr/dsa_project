@@ -79,6 +79,24 @@ do{
         }
     }
     private void MarkTaskComplete(Scanner scanner) {
+        System.out.println("------ MARK TASK COMPLETE ------");
+
+        if(taskList.isEmpty()){ // check if the list is empty
+            System.out.println("No task available");
+            return;
+        }
+
+        System.out.println("Enter the name of task you want to mark as complete");
+        String taskName = scanner.nextLine();
+
+        boolean success = taskList.MarkTaskComplete(taskName);
+
+
+        if(success){
+            System.out.println("Mark task as complete!" + taskName);
+        }else{
+            System.out.println("No task found" + taskName);
+        }
 
     }
     private void showStatistics() {
