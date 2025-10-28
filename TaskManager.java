@@ -2,22 +2,22 @@ package com.mycompany.dsa_final_project;
 
 import java.util.Scanner;
 
-public class TaksManager(){
-    private LinkedList taskList;
-    
-    
-    public TaskManager(){
-        this.taskList = new LInkedList();
+public class TaskManager { //  declaration for the class TaskManager
+    private LinkedList taskList; // this will hold all our task 
+    Scanner scanner = new Scanner(System.in);
+    public TaskManager(){ //constructor for the TaskManager 
+        this.taskList = new LinkedList(); //start with an empty list of task
+
     }
 
-
-    public void start(Scanner scanner){
-    int choice;    
+    public void start(Scanner scanner){ //main entry for the app's system
+        int choice;
 do{
     displayMenu();
-    System.out.println("Enter your choice");
+    System.out.println("Enter your choice!");
     choice = scanner.nextInt();
-    scanner.nextInt();
+    scanner.nextLine();
+
     switch(choice) {
         case 1 -> addTask(scanner);
         case 2 -> ViewAllTask();
@@ -29,9 +29,9 @@ do{
         default -> System.out.println("INVALID CHOICE");
     }
 } while (choice != 0);
-  
-}
-     private void displayMenu() {
+
+    }
+    private void displayMenu() { //method that prints the menu options
         System.out.println("\n--- MAIN MENU ---");  // Print header
         System.out.println("1. Add New Task");      // Option 1
         System.out.println("2. View All Tasks (Oldest First)"); // Option 2
@@ -43,17 +43,22 @@ do{
 
     }
     private void addTask(Scanner scanner) {
-        System.out.println("-------- We will now be adding a new task --------");
-        System.out.println("Enter new task name");
+        System.out.println("\n--------We will be adding new Task--------");
+        System.out.println("Enter new Task name");
         String name = scanner.nextLine();
         System.out.println("Enter the task's priority (High/Medium/Low)");
         String priority = scanner.nextLine();
-        System.out.println("Enter the task's category");
+        System.out.println("Enter task's category");
         String category = scanner.nextLine();
+
+        Task newTask = new Task(name, priority, category);// CREATE A NEW TASK OBJECT 
+        taskList.addTask(newTask);     // ADDING IT TO OUR LIST 
+        System.out.println("✓ Task added successfully");
     }
     private void ViewAllTask(){
         System.out.println(" --------The list of all Task (OLDEST FIRST)-------- ");
         taskList.displayAllTask();
+
     }
     private void ViewFirstTask(){
         System.out.println(" --------All task (NEWEST FIRST)-------- ");
@@ -77,6 +82,7 @@ do{
         }else{
             System.out.println("Task not found " + taskName);
         }
+
     }
     private void MarkTaskComplete(Scanner scanner) {
         System.out.println("------ MARK TASK COMPLETE ------");
@@ -100,7 +106,27 @@ do{
 
     }
     private void showStatistics() {
+        System.out.println("\n------ TASK STATISTICS ------");
+
+
+        // to get total number of task
+        int totalTasks = taskList.getSize();
+        int completedTask = taskList.getCompleteCount();
+        int pendingTask = totalTasks - completedTask;
+
+        System.out.println("Total tasks: " + totalTasks);
+        System.out.println("Completed tasks: " + completedTask);
+        System.out.println("Pending tasks: " + pendingTask);
+
+        if(totalTasks == 0){
+            System.out.println("No tasks yet - add some tasks to get started");
+        }else if(completedTask == totalTasks){
+            System.out.println("GOOD, All task complete");
+        }else{
+            System.out.println("Almost done!" + pendingTask + "task pending.");
+        }
 
     } 
 }
-  
+
+    
