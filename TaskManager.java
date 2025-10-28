@@ -61,7 +61,22 @@ do{
 
     }
     private void deleteTask(Scanner scanner) {
+        System.out.println("\n ------ Delete Task ------");
+        if (taskList.isEmpty()){ // checking if the list contains anything
+            System.out.println("No task to Delete");
+            return;
+        }
+        System.out.println("Enter task name you want to delete");
+        String taskName = scanner.nextLine(); // recieves the name of the task to be deleted
+        
+        Task deletedTask = taskList.deleteTask(taskName); //try to delete the task
 
+        if (deletedTask != null){ // to tell us what happend
+            System.out.println( "Task deleted successfully: " + deletedTask.name);
+
+        }else{
+            System.out.println("Task not found " + taskName);
+        }
     }
     private void MarkTaskComplete(Scanner scanner) {
 
