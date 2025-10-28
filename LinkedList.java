@@ -1,20 +1,22 @@
 package com.mycompany.dsa_final_project;
 
-import java.util.Scanner;
+
 
 
 public class LinkedList {
-    private Node<Task> head;    
-    private Node<Task> tail;
-    private int size;
+    private Node<Task> head; // The very first task in the chain 
+    private Node<Task> tail; // The very last task in the chain 
+    private int size; //
 
-public LinkedList(){
+
+public LinkedList(){ //constructor create a new linklist, which is empty
     this.head = null;
     this.tail = null;
     this.size = 0;
 }
+
 public void addTask(Task task){
-  Node<Task> newNode = new Node<>(task); // to wrap in a box (node)
+    Node<Task> newNode = new Node<>(task); // to wrap in a box (node)
     
     if(head == null){ //if the list is empty
         head = newNode; //this will make the new task the first 
@@ -24,37 +26,37 @@ public void addTask(Task task){
         newNode.previous = tail;// new task points to the old last task 
         tail = newNode;// new task will become the new last task 
     }
-    size++; // every time if there's something add the size will also expand  
+    size++; // every time if there's something add the size will also expand
 }
 public void displayAllTask(){
-    if(head == null){
-        System.out.println("No task found. ");
+    if(head == null){ // to check if the current chain is empty
+        System.out.println(" No task found. "); 
         return;
-}
-    Node<Task> current = head;
-    int index = 1;
+    }
+    Node<Task> current = head; //initalized current and make it point as the head
+    int index = 1; //create new variable for the lines
 
     while(current != null){
         System.out.println(index + ". " + current.data);
         current = current.next;
-        index++
+        index++;
     }
 }
 public void displayTaskBackwards(){
     if(tail == null){
-    System.out.println("No task found. ");
-    return;
+        System.out.println(" No tasks found ");
+        return;
     }
     System.out.println(" ------ TASKS (NEWEST FIRST)------ ");
-        Node<Task> current = tail;
-            int index = size;
-    while(current != null){
-        System.out.println(index + ". " + current.data );
+    Node<Task> current = tail;
+    int index = size;
+    while (current != null){
+        System.out.println(index + ". " + current.data);
         current = current.previous;
         index--;
     }
 }
-    public boolean isEmpty(){// tells us that if their's a file
+public boolean isEmpty(){// tells us that if their's a file
     return head == null;
 }
 public Task removeNode(Node<Task> nodeToRemove){
@@ -73,6 +75,7 @@ public Task removeNode(Node<Task> nodeToRemove){
     size--;
     return removedTask;
 }
+
 public Task deleteTask(String taskName){
     if(head == null){ // to check if it's empty
         return null;
@@ -104,4 +107,25 @@ public boolean MarkTaskComplete(String taskName){
     }
     return false;// task is not found 
 }
+public int getCompleteCount(){
+    int count = 0; // to start the count or counter
+
+    Node<Task> current = head; //to start the task from the head
+
+    while(current != null){ // to look if it's empty
+        if(current.data.completed){ // to checking if it's mark completed
+            count++;//addition for our counter
+        }
+        current = current.next;
+    }
+    return count;
 }
+public int getSize(){
+    return size;
+}
+
+}
+
+
+ 
+
