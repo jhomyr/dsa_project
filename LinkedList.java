@@ -53,7 +53,24 @@ public void displayTaskBackwards(){
         current = current.previous;
         index--;
     }
-        
-    
+}
+    public boolean isEmpty(){// tells us that if their's a file
+    return head == null;
+}
+public Task removeNode(Node<Task> nodeToRemove){
+    Task removedTask = nodeToRemove.data; //
+
+    if (nodeToRemove.previous == null){ //If we're removing the FIRST task, update the head. If not, connect the previous task to the next task.
+        head = nodeToRemove.next;
+    }else{
+        nodeToRemove.previous.next = nodeToRemove.next;
+    }
+    if (nodeToRemove.next == null) {// If we're removing the LAST task, update the tail. If not, connect the next task to the previous task.
+        tail = nodeToRemove.previous;
+    }else{
+        nodeToRemove.next.previous = nodeToRemove.previous;
+    }
+    size--;
+    return removedTask;
 }
 }
