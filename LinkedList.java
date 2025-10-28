@@ -73,4 +73,35 @@ public Task removeNode(Node<Task> nodeToRemove){
     size--;
     return removedTask;
 }
+public Task deleteTask(String taskName){
+    if(head == null){ // to check if it's empty
+        return null;
+    }
+    //Start searching from the first task
+    //Begin looking from the very first file in the cabinet
+    Node<Task> current = head;
+
+    while(current != null){ // check if it's not null
+        if(current.data.name.equals(taskName)){ // checks one by one in the data it it's equal to the task name inputed by the user
+            return  removeNode(current);// if found remove it then return the deleted task
+        }
+        current = current.next;// to move it to the next file if not right file found
+    }
+    return null;
+}
+public boolean MarkTaskComplete(String taskName){
+    if(head == null){ // cheack it chain is empty
+        return false;//no task to be mark complete
+    }
+    Node<Task> current = head; // to start seaching the head which is now called current
+
+    while(current != null){ //double checking the head which is current not empty
+        if(current.data.name.equals(taskName)){ // finds the user input which is taskName wthin the file
+            current.data.completed = true; // if found mark it compelete
+            return true;//return value true
+        }
+        current = current.next; //move to the next task
+    }
+    return false;// task is not found 
+}
 }
