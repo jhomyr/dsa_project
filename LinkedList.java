@@ -1,8 +1,6 @@
 package com.mycompany.dsa_final_project;
 
 
-
-
 public class LinkedList {
     private Node<Task> head; // The very first task in the chain 
     private Node<Task> tail; // The very last task in the chain 
@@ -85,7 +83,7 @@ public Task deleteTask(String taskName){
     Node<Task> current = head;
 
     while(current != null){ // check if it's not null
-        if(current.data.name.equals(taskName)){ // checks one by one in the data it it's equal to the task name inputed by the user
+        if(current.data.name.equalsIgnoreCase(taskName)){ // checks one by one in the data it it's equal to the task name inputed by the user we make it case insensitive too
             return  removeNode(current);// if found remove it then return the deleted task
         }
         current = current.next;// to move it to the next file if not right file found
@@ -99,13 +97,14 @@ public boolean MarkTaskComplete(String taskName){
     Node<Task> current = head; // to start seaching the head which is now called current
 
     while(current != null){ //double checking the head which is current not empty
-        if(current.data.name.equals(taskName)){ // finds the user input which is taskName wthin the file
+        if(current.data.name.equalsIgnoreCase(taskName)){ // finds the user input which is taskName wthin the file we also make it case insensitive
             current.data.completed = true; // if found mark it compelete
             return true;//return value true
         }
         current = current.next; //move to the next task
     }
     return false;// task is not found 
+
 }
 public int getCompleteCount(){
     int count = 0; // to start the count or counter
@@ -123,8 +122,25 @@ public int getCompleteCount(){
 public int getSize(){
     return size;
 }
-
+public Task findTaskByName(String taskName){
+    if(head == null){
+    return null;
 }
+Node<Task> current = head;
+
+
+while(current != null){
+    if(current.data.name.equalsIgnoreCase(taskName)){
+        return current.data;
+    }
+    current = current.next;
+}
+return null;
+}
+}
+
+
+
 
 
  
