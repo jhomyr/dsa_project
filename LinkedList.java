@@ -137,6 +137,28 @@ while(current != null){
 }
 return null;
 }
+public Task getHighestPriorityTask(){
+    if(head == null){ // to check if it's empty
+        return null; // return nothing
+    }
+
+    Node<Task> current = head;// so we start at the head of the chain 
+    Task highePriorityTask = null; // assume the first task is the most important
+    int HighestPriority = -1;//get its priority value
+
+    while(current != null){// look through every task in the list 
+        if(!current.data.completed){//only concider the task that are not completed
+            int currentPriority = current.data.getPriorityValue();//get the tasks priority points
+
+            if(currentPriority > HighestPriority){//comparing of priority points of tasks
+                highePriorityTask = current.data;//swap the lower value to the higher value
+                HighestPriority = currentPriority;// update who is the current highest task value
+            }
+        }
+        current = current.next; // to connect it to the next task in the list
+    }
+return highePriorityTask;// return the task with the highest priority value
+}
 }
 
 
