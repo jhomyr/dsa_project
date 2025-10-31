@@ -34,6 +34,8 @@ do{
         case 8 -> viewTasksByCategory();  
         case 9 -> displayCategoryTree();
         case 10 -> showNextTask();          
+        case 11 -> quickSortTasks();          
+        case 12 -> insertionSortTasks();      
         case 0 -> System.out.println("Goodbye");
         default -> System.out.println("INVALID CHOICE");
     }
@@ -52,6 +54,7 @@ do{
         System.out.println("8. View Tasks by Category");  
         System.out.println("9. Display Category Tree");
         System.out.println("10. Show Next Task (Highest Priority)"); 
+        System.out.println("11. Quick Sort by Priority");                 System.out.println("12. Insertion Sort by Priority");     
         System.out.println("0. Exit");
 
     }
@@ -271,7 +274,38 @@ do{
             System.out.println("This is LOW priority - can wait if needed!");
             }
         }
+private void quickSortTasks() {
+    System.out.println("\n--- QUICK SORT BY PRIORITY ---");
+    if (taskList.isEmpty()) {
+        System.out.println("No tasks to sort. Add some tasks first!");
+        return;
     }
+    
+    System.out.println("Before sorting:");
+    taskList.displayAllTask();
+    
+    taskList.quickSortByPriority();
+    
+    System.out.println("After Quick Sort (High → Medium → Low):");
+    taskList.displayAllTask();
+}
+
+private void insertionSortTasks() {
+    System.out.println("\n--- INSERTION SORT BY PRIORITY ---");
+    if (taskList.isEmpty()) {
+        System.out.println("No tasks to sort. Add some tasks first!");
+        return;
+    }
+    
+    System.out.println("Before sorting:");
+    taskList.displayAllTask();
+    
+    taskList.insertionSortByPriority();
+    
+    System.out.println("After Insertion Sort (High → Medium → Low):");
+    taskList.displayAllTask();
+}
+}
 
 
     
