@@ -33,6 +33,7 @@ do{
         case 7 -> undoLastAction();
         case 8 -> viewTasksByCategory();  
         case 9 -> displayCategoryTree();
+        case 10 -> showNextTask();          
         case 0 -> System.out.println("Goodbye");
         default -> System.out.println("INVALID CHOICE");
     }
@@ -50,6 +51,7 @@ do{
         System.out.println("7. Undo Last Action");
         System.out.println("8. View Tasks by Category");  
         System.out.println("9. Display Category Tree");
+        System.out.println("10. Show Next Task (Highest Priority)"); 
         System.out.println("0. Exit");
 
     }
@@ -242,9 +244,34 @@ do{
 }
         private void displayCategoryTree() {
         System.out.println("\n--- CATEGORY TREE STRUCTURE ---");
-        categoryTree.displayCategoryTree();  // This will show the entire folder structure
+        categoryTree.displayCategoryTree();  // This will show the entire folder structurenull
         }
-}
+        public void showNextTask(){
+            if(taskList.isEmpty()){ // to check if there's a tasks in the chain
+                System.out.println("No tasks available. Add some tasks to get started!!!");
+                return; //exits 
+            }
+
+            Task nextTask = taskList.getHighestPriorityTask();// ask our linkList to find the highest priorirty task
+            if(nextTask == null){// check if we found a task
+                System.out.println("All tasks are completed");
+            }else{//we found the next task we need to do base on priority
+                System.out.println(" \n------ YOUR NEXT TASKS ----5-- ");
+                System.out.println(nextTask.name);
+                System.out.println("Priority: " + nextTask.priority);
+                System.out.println("Category: " + (nextTask.category.isEmpty() ? "No Category" : nextTask.category));
+                System.out.println("Status: " + (nextTask.completed ? "Completed" : "Pending"));
+            }
+            int priorityValue = nextTask.getPriorityValue(); // 
+            if(priorityValue == 3){
+                System.out.println("This is HIGH priority - consider doing this first!");
+            } else if (priorityValue == 2) {
+            System.out.println("This is MEDIUM priority - to do soon!");
+            } else if (priorityValue == 1) {
+            System.out.println("This is LOW priority - can wait if needed!");
+            }
+        }
+    }
 
 
     
