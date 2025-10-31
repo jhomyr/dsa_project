@@ -30,5 +30,19 @@ public class Task {
              + " | Priority: " + priority
              + " | Category: " + category;
     }
+    public int getPriorityValue(){// method in converting priority value to a number comparison
+        String lowerPriority = priority.toLowerCase();// convert priority to lowercase so high, HIGH all works the same
+
+        switch(lowerPriority){
+            case "high":
+                return 3;// most important
+            case "medium":
+                return 2;//less important
+            case "low":
+                return 1;// least important
+            default:
+                return 0;//if input is invalid 
+        }
+    }
 }
 
