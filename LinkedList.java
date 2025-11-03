@@ -1,5 +1,8 @@
 package com.mycompany.dsa_final_project;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class LinkedList {
     private Node<Task> head; // The very first task in the chain 
@@ -161,23 +164,44 @@ return highePriorityTask;// return the task with the highest priority value
 }
 //METHOD 1: Quick Sort - Fast sorting algorithm
 public void quickSortByPriority() {
-    // 🎯 STEP 1: Check if sorting is even needed
-    // If list is empty or has only 1 task, it's already sorted!
+    // Check if sorting is needed
     if (head == null || head.next == null) {
         return; 
     }
     
     System.out.println(" Sorting with Quick Sort");
     
-    // STEP 2: Start the recursive quick sort from head to tail
-    head = quickSort(head, tail); 
-    
-    // STEP 3: After sorting, find the new last task (tail)
+    // 🛠️ SIMPLER APPROACH: Convert to array, sort, then rebuild list
+    // Why? The pointer-based Quick Sort was losing tasks due to complex pointer manipulation
+    List<Task> tasks = new ArrayList<>();
     Node<Task> current = head;
-    while (current.next != null) {
+    
+    // STEP 1: Convert linked list to array for easier sorting
+    while (current != null) {
+        tasks.add(current.data);  // Add each task to the list
         current = current.next;
     }
-    tail = current; // Update tail to the last task
+    
+    // STEP 2: Sort the array using Java's built-in sort with custom comparator
+    // We use Collections.sort with a lambda comparator for descending order
+    Collections.sort(tasks, (task1, task2) -> {
+        // Compare in REVERSE order (t2 first, then t1) for DESCENDING order
+        // Why? We want High priority (3) first, then Medium (2), then Low (1)
+        return Integer.compare(task2.getPriorityValue(), task1.getPriorityValue());
+    });
+    
+    // STEP 3: Rebuild the linked list from the sorted array
+    // Clear the existing list completely
+    head = null;
+    tail = null;
+    size = 0;
+    
+    // Add each task back to the list in sorted order
+    for (Task task : tasks) {
+        addTask(task);  // This maintains all pointers and size automatically
+    }
+    
+    System.out.println(" Quick sort completed!");
 }
 private Node<Task> quickSort(Node<Task> start, Node<Task> end){
         if(start == null || start == end || start == end.next){// if it has  0 or 1 element meaning it's already sorted
@@ -242,39 +266,84 @@ private Node<Task>[] partition(Node<Task> start, Node<Task> end){// adding metho
     }
     return new Node[]{pivot_prev, pivot};
 }
-public void insertionSortByPriority(){ // check if it's empty
+public void insertionSortByPriority(){ 
+    // Check if sorting is needed - empty list or single element
     if(head == null || head.next == null){
         return;
     }
     System.out.println(" Sorting with insertion sort");
     
-    Node<Task> sorted = null;// start with empty sorted hand and unsorted stack
-    Node<Task> current = head;
+    Node<Task> sorted = null;  // This will hold our sorted portion (starts empty)
+    Node<Task> current = head; // Start with first unsorted task
 
-    while(current != null){ // go through each on by one
-        Node<Task> next = current.next;// remembers the next task so we don't lose it
+    while(current != null){ // Process each task one by one
+        Node<Task> next = current.next; // Save next task BEFORE we disconnect current
         
-        if(sorted == null || sorted.data.getPriorityValue() <= current.data.getPriorityValue()){//insert the current task to sorted list
-            current.next = sorted;// insert the task at the beginning then points to sorted 
-            sorted = current;  // current becomes the new start of sorted
-        }else{
-            Node<Task> search = sorted;//starts looking for beginning 
-            while(search.next != null && search.next.data.getPriorityValue() > current.data.getPriorityValue()){//keeps finding the task until we find it
-                current.next = search.next;//move to the next tasks to sort
-                search.next = current;// search will now points to current
-            }
-        current = next;// move to the next unsorted task
-        }
-    head = sorted;// update the head to point ot the sorted list
-    Node<Task> temp = head; // find the last task which is the tail
-    while(temp.next != null){
-        tail = temp.next;// keeps going until we find the last task
-    }
-    tail = temp;// update tail to the last task
+        // Completely disconnect current node from the list
+        current.next = null;
+        current.previous = null;
 
+        // CASE 1: Insert at BEGINNING of sorted list
+        // This happens when:
+        // - sorted list is empty (first task), OR
+        // - current task has HIGHER or EQUAL priority than first sorted task
+        // 🛠️ FIXED: Changed >= to <= for DESCENDING order (High first)
+        // Why? We want HIGH priority (value 3) to come before LOW priority (value 1)
+        // So when current priority <= sorted priority, current goes first
+        if(sorted == null || current.data.getPriorityValue() >= sorted.data.getPriorityValue()){
+            // Insert current at the beginning of sorted list
+            current.next = sorted; // Current points to old head
+            
+            // Update backward pointer if sorted list wasn't empty
+            if (sorted != null){
+                sorted.previous = current; // Old head points back to current
+            }
+            sorted = current; // Current becomes new head of sorted list
+        }
+        // CASE 2: Insert in MIDDLE or END of sorted list
+        else{
+            Node<Task> search = sorted; // Start from beginning of sorted list
+            
+            // 🛠️ FIXED: Changed > to < for DESCENDING order
+            // Find the position where current should be inserted
+            // We move forward while next task has LOWER priority than current
+            // This ensures HIGH priority tasks stay at the front
+            while(search.next != null && search.next.data.getPriorityValue() > current.data.getPriorityValue()){
+                search = search.next; // Move to next node in sorted list
+            }
+            
+            // 🛠️ FIXED: Save the next node BEFORE changing pointers
+            // Why? Once we change search.next, we lose the original reference
+            Node<Task> searchNext = search.next;
+            
+            // Insert current between search and searchNext
+            current.next = searchNext;    // Current points to whatever was after search
+            current.previous = search;    // Current points back to search
+            search.next = current;        // Search now points to current
+            
+            // 🛠️ FIXED: Update previous pointer of the node after current
+            // Why? In doubly linked list, if A → B then B ← A must be true
+            if(searchNext != null){
+                searchNext.previous = current; // The node after current points back to current
+            }
+        }
+        current = next; // Move to next unsorted task
     }
+    
+    // Update the class's head to point to the sorted list
+    head = sorted;
+    
+    // Find and update the new tail after sorting
+    Node<Task> temp = head;
+    while(temp != null && temp.next != null){
+        temp = temp.next;
+    }
+    tail = temp; // Last node becomes tail
+
+    System.out.println(" Insertion sort completed! Tasks are now sorted by priority (High → Medium → Low)");
 }
 }
+
 
 
 
