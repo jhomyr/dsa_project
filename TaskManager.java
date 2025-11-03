@@ -15,33 +15,39 @@ public class TaskManager { //  declaration for the class TaskManager
 
     }
 
-    public void start(Scanner scanner){ //main entry for the app's system
-        int choice;
-do{
-    displayMenu();
-    System.out.println("Enter your choice!");
-    choice = scanner.nextInt();
-    scanner.nextLine();
+    public void start(Scanner scanner){ 
+    int choice;
+    do{
+        displayMenu();
+        System.out.println("Enter your choice!");
+        
+        // ✅ SAFE INPUT HANDLING
+        while (!scanner.hasNextInt()) {
+            System.out.println(" Invalid input! Please enter a number (0-12):");
+            scanner.next(); // Clear the invalid input
+        }
+        choice = scanner.nextInt();
+        scanner.nextLine(); // Clear the newline character
 
-    switch(choice) {
-        case 1 -> addTask(scanner);
-        case 2 -> ViewAllTask();
-        case 3 -> ViewFirstTask();
-        case 4 -> deleteTask(scanner);
-        case 5 -> MarkTaskComplete(scanner);
-        case 6 -> showStatistics();
-        case 7 -> undoLastAction();
-        case 8 -> viewTasksByCategory();  
-        case 9 -> displayCategoryTree();
-        case 10 -> showNextTask();          
-        case 11 -> quickSortTasks();          
-        case 12 -> insertionSortTasks();      
-        case 0 -> System.out.println("Goodbye");
-        default -> System.out.println("INVALID CHOICE");
-    }
-} while (choice != 0);
-
-    }
+        switch(choice) {
+            case 1 -> addTask(scanner);
+            case 2 -> ViewAllTask();
+            case 3 -> ViewFirstTask();
+            case 4 -> deleteTask(scanner);
+            case 5 -> MarkTaskComplete(scanner);
+            case 6 -> showStatistics();
+            case 7 -> undoLastAction();
+            case 8 -> viewTasksByCategory();  
+            case 9 -> displayCategoryTree();
+            case 10 -> showNextTask();          
+            case 11 -> quickSortTasks();          
+            case 12 -> insertionSortTasks();      
+            case 0 -> System.out.println(" Goodbye! Thanks for using Task Manager!");
+            default -> System.out.println(" INVALID CHOICE! Please enter 0-12.");
+        }
+    } while (choice != 0);
+}
+    
     private void displayMenu() { //method that prints the menu options
         System.out.println("\n--- MAIN MENU ---");  // Print header
         System.out.println("1. Add New Task");      // Option 1
@@ -59,26 +65,65 @@ do{
 
     }
     private void addTask(Scanner scanner) {
-        System.out.println("\n--------We will be adding new Task--------");
-        System.out.println("Enter new Task name");
-        String name = scanner.nextLine();
-        System.out.println("Enter the task's priority (High/Medium/Low)");
-        String priority = scanner.nextLine();
-        System.out.println("Enter task's category path (e.g., School/CS203 or just Work):");
-        System.out.println("Leave empty for 'All Tasks'");
-        String categoryPath = scanner.nextLine();
-        
-        Task newTask = new Task(name, priority, categoryPath);// CREATE A NEW TASK OBJECT 
-
-        taskList.addTask(newTask);     // ADDING IT TO OUR LIST 
-        
-        categoryTree.addTaskToCategory(newTask, categoryPath);
-        
-        undoStack.push("ADD", newTask);//We're telling our memory bank: "Remember I just ADDED this task, in case I want to undo it later"
-        
-         System.out.println("✓ Task added successfully to category: " + 
-                      (categoryPath.isEmpty() ? "All Tasks" : categoryPath));
+    System.out.println("\n--------We will be adding new Task--------");
+    
+        String name;
+    while (true) {
+        System.out.println("Enter new Task name:");
+        name = scanner.nextLine().trim();
+        if (!name.isEmpty()) {
+            break;
+        }
+        System.out.println(" Task name cannot be empty! Please enter a name.");
     }
+    
+    
+    String priority;
+    while (true) {
+        System.out.println("Enter the task's priority (High/Medium/Low):");
+        priority = scanner.nextLine().trim();
+        
+        // Check if priority is empty
+        if (priority.isEmpty()) {
+            System.out.println(" Priority cannot be empty! Please enter High, Medium, or Low.");
+            continue;
+        }
+        
+        // Convert to lowercase for case-insensitive comparison
+        String lowerPriority = priority.toLowerCase();
+        
+        // Validate against allowed priorities
+        if (lowerPriority.equals("high") || 
+            lowerPriority.equals("medium") || 
+            lowerPriority.equals("low")) {
+            
+            // Convert to proper case for consistency
+            if (lowerPriority.equals("high")) priority = "High";
+            else if (lowerPriority.equals("medium")) priority = "Medium";
+            else if (lowerPriority.equals("low")) priority = "Low";
+            
+            break; // Valid priority found - exit loop
+        } else {
+            System.out.println(" Invalid priority '" + priority + "'! Please enter only: High, Medium, or Low.");
+        }
+    }
+    
+    
+    System.out.println("Enter task's category path (e.g., School/CS203 or just Work):");
+    System.out.println("Leave empty for 'All Tasks'");
+    String categoryPath = scanner.nextLine();
+    
+    Task newTask = new Task(name, priority, categoryPath);// CREATE A NEW TASK OBJECT 
+
+    taskList.addTask(newTask);     // ADDING IT TO OUR LIST 
+    
+    categoryTree.addTaskToCategory(newTask, categoryPath);
+    
+    undoStack.push("ADD", newTask);//We're telling our memory bank: "Remember I just ADDED this task, in case I want to undo it later"
+    
+     System.out.println(" Task added successfully to category: " + 
+                  (categoryPath.isEmpty() ? "All Tasks" : categoryPath));
+}
     private void ViewAllTask(){
         System.out.println(" --------The list of all Task (OLDEST FIRST)-------- ");
         taskList.displayAllTask();
