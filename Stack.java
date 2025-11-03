@@ -21,7 +21,7 @@ public class Stack {
     private Node<ActionRecord> top; // top of the stack
 
 
-    public Stack(){
+    public Stack(){ 
         this.top = null; //to start empty within the stack
     }
     // to push new action to the stack 
